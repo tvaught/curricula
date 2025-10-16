@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>{{ curriculum.title }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="title">{{ curriculum.title }}</div>
+      <div class="small" style="margin:10px 0 14px">
+        {{ curriculum.description or 'Interactive learning checklist. Progress saves in your browser.' }}
+      </div>
+
+      <!-- Curriculum Switcher -->
+      <div class="group">
+        <h4>Switch Curriculum</h4>
+        <select id="curriculumSelect" class="btn" style="width:100%">
+          {% for f in files %}
+            <option value="{{ f }}" {% if f == filename %}selected{% endif %}>
+              {{ f.replace('.json','').replace('_',' ').title() }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="group">
+        <h4>Controls</h4>
+        <div class="flex">
+          <button class="btn" id="expandAll">Expand All</button>
+          <button class="btn" id="collapseAll">Collapse All</button>
+        </div>
+        <div class="flex" style="margin-top:10px">
+          <button class="btn" id="resetProgress">Reset Progress</button>
+          <button class="btn" id="exportNotes">Export Notes</button>
+        </div>
+      </div>
+
+      <div class="footer small">Use <span class="kbd">⌘/Ctrl</span> + <span class="kbd">F</span> to find tasks. All data saved locally.</div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="title">Curriculum & Checklist</div>
+        <div class="search">
+          <input type="search" id="search" placeholder="Search tasks…" />
+        </div>
+      </div>
+      <div id="phases"></div>
+    </main>
+  </div>
+
+ <script>
+  const curriculum = {{ curriculum | tojson }};
+  const stateKey = "curriculum_state_" + "{{ filename }}";
+  const notesKey = "curriculum_notes_" + "{{ filename }}";
+  const lastKey = "curriculum_last_file"; // remember last loaded curriculum
+
+  const state = JSON.parse(localStorage.getItem(stateKey) || "{}");
+  const notes = JSON.parse(localStorage.getItem(notesKey) || "{}");
+
+  // --- Curriculum Selector ---
+  const selector = document.getElementById("curriculumSelect");
+
+  // Save the current file as "last used"
+  localStorage.setItem(lastKey, "{{ filename }}");
+
+  // If user manually changes curriculum, reload and save choice
+  selector.addEventListener("change", e => {
+    const file = e.target.value;
+    localStorage.setItem(lastKey, file);
+    window.location = `/?file=${file}`;
+  });
+
+  // If user visits root "/" with no ?file, auto-redirect to last used
+  (function redirectToLastIfNeeded(){
+    const params = new URLSearchParams(window.location.search);
+    if(!params.get("file")) {
+      const last = localStorage.getItem(lastKey);
+      if(last && last !== "{{ filename }}") {
+        window.location = `/?file=${last}`;
+      }
+    }
+  })();
+
+  // --- State Persistence ---
+  function save() {
+    localStorage.setItem(stateKey, JSON.stringify(state));
+    localStorage.setItem(notesKey, JSON.stringify(notes));
+  }
+
+  // --- Rendering Logic (unchanged from previous version) ---
+  function render() {
+    const container = document.getElementById("phases");
+    container.innerHTML = "";
+    const q = document.getElementById("search").value.trim().toLowerCase();
+
+    curriculum.phases.forEach(phase => {
+      const matches = !q || phase.title.toLowerCase().includes(q)
+        || (phase.description||"").toLowerCase().includes(q)
+        || phase.tasks.some(t => t.text.toLowerCase().includes(q));
+      if (!matches) return;
+
+      const checkedCount = phase.tasks.filter(t => !!state[t.id]).length;
+      const pct = Math.round(100 * checkedCount / phase.tasks.length);
+
+      const details = document.createElement("details");
+      details.className = "phase";
+      if (pct < 100) details.open = true;
+
+      const summary = document.createElement("summary");
+      summary.innerHTML = `
+        <div class="phase-header">
+          <div>
+            <span>${phase.title}</span>
+            <div class="small">${phase.description || ""}</div>
+          </div>
+          <div class="pill"><span>Progress</span><strong>${checkedCount}/${phase.tasks.length}</strong></div>
+        </div>`;
+
+      const content = document.createElement("div");
+      content.className = "content";
+
+      const badges = document.createElement("div");
+      (phase.badges||[]).forEach(b => {
+        const el=document.createElement("span");
+        el.className="pill";
+        el.textContent=b;
+        badges.appendChild(el);
+      });
+
+      const progress=document.createElement("div");
+      progress.className="progress";
+      progress.innerHTML=`<i style="width:${pct}%"></i>`;
+
+      const list=document.createElement("div");
+      (phase.tasks||[]).forEach(task=>{
+        if(q && !task.text.toLowerCase().includes(q)) return;
+        const item=document.createElement("div");
+        item.className="task"+(state[task.id]?" checked":"");
+        const id=`task_${task.id}`;
+        item.innerHTML=`
+          <input class="checkbox" type="checkbox" id="${id}" ${state[task.id]?"checked":""}/>
+          <label for="${id}"><b>${task.id}</b> — ${task.text}</label>
+          <div class="meta">${(task.links||[]).map(l=>`<a href="${l.url}" target="_blank">${l.label}</a>`).join(" · ")}</div>
+          <textarea class="note" placeholder="Notes…" data-id="${task.id}"></textarea>
+        `;
+        list.appendChild(item);
+      });
+
+      const drills=document.createElement("div");
+      if(phase.drills && phase.drills.length){
+        drills.className="group";
+        drills.innerHTML=`<h4>Drill-down Resources</h4>
+          <div class="links">${phase.drills.map(d=>`<a href="${d.url}" target="_blank">${d.label}</a>`).join("")}</div>`;
+      }
+
+      content.appendChild(badges);
+      content.appendChild(progress);
+      content.appendChild(list);
+      content.appendChild(drills);
+      details.appendChild(summary);
+      details.appendChild(content);
+      container.appendChild(details);
+    });
+
+    // Restore notes + hook events
+    container.querySelectorAll("textarea.note").forEach(ta=>{
+      const id=ta.getAttribute("data-id");
+      ta.value=notes[id]||"";
+      ta.addEventListener("input",()=>{notes[id]=ta.value;save();});
+    });
+    container.querySelectorAll("input[type='checkbox']").forEach(cb=>{
+      cb.addEventListener("change",()=>{
+        const id=cb.id.replace("task_","");
+        state[id]=cb.checked;
+        save();
+        render();
+      });
+    });
+  }
+
+  // --- Global Controls ---
+  document.getElementById("search").addEventListener("input", render);
+  document.getElementById("expandAll").addEventListener("click",()=>document.querySelectorAll("details.phase").forEach(d=>d.open=true));
+  document.getElementById("collapseAll").addEventListener("click",()=>document.querySelectorAll("details.phase").forEach(d=>d.open=false));
+  document.getElementById("resetProgress").addEventListener("click",()=>{
+    if(confirm("Reset all progress and notes?")){
+      localStorage.removeItem(stateKey);
+      localStorage.removeItem(notesKey);
+      location.reload();
+    }
+  });
+  document.getElementById("exportNotes").addEventListener("click",()=>{
+    const blob=new Blob([JSON.stringify({checks:state,notes},null,2)],{type:"application/json"});
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);
+    a.download="{{ filename }}_progress.json";
+    a.click();
+  });
+
+  render();
+</script>
+</body>
+</html>
