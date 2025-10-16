@@ -1,0 +1,258 @@
+{
+  "title": "GIS Curriculum (QGIS • Environmental • Texas Hill Country)",
+  "description": "Checklist + project guide for learning QGIS and environmental GIS workflows, focused on Edwards & Real Counties in the Texas Hill Country.",
+  "phases": [
+    {
+      "id": "phase1",
+      "title": "Phase 1 — Foundations (Global → Local)",
+      "badges": ["QGIS Setup", "Data Formats", "Folder Hygiene"],
+      "description": "Install tools, understand vector/raster basics, and make first maps (global + Texas Hill Country).",
+      "tasks": [
+        {
+          "id": "1.1",
+          "text": "Install QGIS (LTR). Enable QuickMapServices, Semi-Automatic Classification, DataPlotly, Raster Terrain Analysis plugins.",
+          "links": [
+            {"label": "QGIS Download", "url": "https://qgis.org/en/site/forusers/download.html"},
+            {"label": "QuickMapServices", "url": "https://plugins.qgis.org/plugins/quick_map_services/"},
+            {"label": "Semi-Automatic Classification", "url": "https://fromgistors.blogspot.com/p/semi-automatic-classification-plugin.html"}
+          ]
+        },
+        {
+          "id": "1.2",
+          "text": "Create project folder tree: raw_data/ (vectors, rasters, satellite), processed_data/, scripts/, outputs/, metadata/.",
+          "links": []
+        },
+        {
+          "id": "1.3",
+          "text": "Download starter global datasets: Natural Earth (boundaries, rivers), ESA WorldCover (10 m), SRTM DEM.",
+          "links": [
+            {"label": "Natural Earth", "url": "https://www.naturalearthdata.com/"},
+            {"label": "ESA WorldCover", "url": "https://esa-worldcover.org/en"},
+            {"label": "USGS EarthExplorer (SRTM)", "url": "https://earthexplorer.usgs.gov/"}
+          ]
+        },
+        {
+          "id": "1.4",
+          "text": "Download local datasets for Edwards & Real Counties: boundaries, hydrography, DEMs (TNRIS, National Map, TWDB, TPWD, LANDFIRE).",
+          "links": [
+            {"label": "TNRIS DataHub", "url": "https://data.tnris.org/"},
+            {"label": "USGS National Map", "url": "https://apps.nationalmap.gov/downloader/"},
+            {"label": "TWDB GIS", "url": "https://www.twdb.texas.gov/mapping/gis/index.asp"},
+            {"label": "TPWD GIS", "url": "https://tpwd.texas.gov/gis/"},
+            {"label": "LANDFIRE", "url": "https://landfire.gov/"}
+          ]
+        },
+        {
+          "id": "1.5",
+          "text": "Milestone: First Maps — (a) Global land cover + admin boundaries; (b) Edwards/Real shaded relief with hydrography.",
+          "links": [
+            {"label": "QGIS Official YouTube", "url": "https://www.youtube.com/@QGISOfficial"},
+            {"label": "OpenSourceOptions: QGIS Basics", "url": "https://www.youtube.com/@opensourceoptions"}
+          ]
+        }
+      ],
+      "drills": [
+        {"label": "QGIS Basics (Playlist)", "url": "https://www.youtube.com/@KlasKarlsson"},
+        {"label": "GeoTIFF, Shapefile, GeoPackage — what & when", "url": "https://docs.qgis.org/latest/en/docs/gentle_gis_introduction/"}
+      ]
+    },
+    {
+      "id": "phase2",
+      "title": "Phase 2 — Terrain & Hydrology",
+      "badges": ["DEM", "Slope/Aspect", "Watersheds"],
+      "description": "Work with elevation data, derive hydrologic layers, and delineate watersheds.",
+      "tasks": [
+        {
+          "id": "2.1",
+          "text": "Download 1/3 arc-sec (~10 m) DEM tiles for Edwards/Real; mosaic if needed.",
+          "links": [
+            {"label": "USGS National Map DEM", "url": "https://apps.nationalmap.gov/downloader/"}
+          ]
+        },
+        {
+          "id": "2.2",
+          "text": "Generate hillshade, slope, and aspect rasters; style them for interpretation.",
+          "links": [
+            {"label": "QGIS Raster Terrain Analysis", "url": "https://docs.qgis.org/latest/en/docs/user_manual/processing_algs/qgis/raster_terrain_analysis.html"}
+          ]
+        },
+        {
+          "id": "2.3",
+          "text": "Extract flow direction/accumulation; derive stream network and pour points.",
+          "links": [
+            {"label": "QGIS Hydrology Tools", "url": "https://docs.qgis.org/latest/en/docs/user_manual/processing_algs/saga/hydrology.html"}
+          ]
+        },
+        {
+          "id": "2.4",
+          "text": "Milestone: Delineate the Nueces River watershed inside Edwards/Real; summarize slope classes.",
+          "links": [
+            {"label": "Watershed Delineation Tutorial (video)", "url": "https://www.youtube.com/results?search_query=qgis+watershed+delineation"}
+          ]
+        }
+      ],
+      "drills": [
+        {"label": "PRISM climate normals (precip)", "url": "https://prism.oregonstate.edu/"},
+        {"label": "NHD (Hydrography)", "url": "https://apps.nationalmap.gov/downloader/"}
+      ]
+    },
+    {
+      "id": "phase3",
+      "title": "Phase 3 — Habitat & Land Cover",
+      "badges": ["Zonal Stats", "Buffers", "Fragmentation"],
+      "description": "Analyze vegetation/habitat distribution; quantify fragmentation near roads & rivers.",
+      "tasks": [
+        {
+          "id": "3.1",
+          "text": "Acquire LANDFIRE vegetation + ESA WorldCover for the counties.",
+          "links": [
+            {"label": "LANDFIRE Vegetation", "url": "https://landfire.gov/"},
+            {"label": "ESA WorldCover", "url": "https://esa-worldcover.org/en"}
+          ]
+        },
+        {
+          "id": "3.2",
+          "text": "Compute class areas by county using Zonal Statistics.",
+          "links": [
+            {"label": "Zonal Stats in QGIS", "url": "https://docs.qgis.org/latest/en/docs/user_manual/processing_algs/qgis/raster_analysis.html#zonal-statistics"}
+          ]
+        },
+        {
+          "id": "3.3",
+          "text": "Create buffers (e.g., 250–500 m) around primary roads; intersect with habitat to estimate fragmentation.",
+          "links": [
+            {"label": "Buffer/Dissolve Tools", "url": "https://docs.qgis.org/latest/en/docs/user_manual/processing_algs/qgis/vector_geometry.html"}
+          ]
+        },
+        {
+          "id": "3.4",
+          "text": "Milestone: Map oak–juniper woodlands vs rangeland; report % within buffers and in protected areas (TPWD layers).",
+          "links": [
+            {"label": "TPWD GIS", "url": "https://tpwd.texas.gov/gis/"}
+          ]
+        }
+      ],
+      "drills": [
+        {"label": "Gentle Intro to GIS (free book)", "url": "https://docs.qgis.org/latest/en/docs/gentle_gis_introduction/"}
+      ]
+    },
+    {
+      "id": "phase4",
+      "title": "Phase 4 — Remote Sensing & Vegetation Indices",
+      "badges": ["Sentinel-2", "NDVI", "Change"],
+      "description": "Use Sentinel-2/Landsat imagery to compute NDVI and detect seasonal or long-term change.",
+      "tasks": [
+        {
+          "id": "4.1",
+          "text": "Download cloud-free Sentinel-2 scenes (summer/winter) for Real County.",
+          "links": [
+            {"label": "Copernicus Open Access", "url": "https://scihub.copernicus.eu/"}
+          ]
+        },
+        {
+          "id": "4.2",
+          "text": "Compute NDVI (NIR-Red)/(NIR+Red); create styled NDVI maps.",
+          "links": [
+            {"label": "Raster Calculator", "url": "https://docs.qgis.org/latest/en/docs/user_manual/processing_algs/qgis/raster_calculator.html"}
+          ]
+        },
+        {
+          "id": "4.3",
+          "text": "Compare NDVI distributions (summer vs winter); export charts (DataPlotly).",
+          "links": [
+            {"label": "DataPlotly Plugin", "url": "https://plugins.qgis.org/plugins/DataPlotly/"}
+          ]
+        },
+        {
+          "id": "4.4",
+          "text": "Milestone: Long-term change — Landsat 1995 vs 2025 to assess woody encroachment (juniper).",
+          "links": [
+            {"label": "EarthExplorer (Landsat)", "url": "https://earthexplorer.usgs.gov/"}
+          ]
+        }
+      ],
+      "drills": [
+        {"label": "NDVI Explained (video search)", "url": "https://www.youtube.com/results?search_query=NDVI+QGIS"}
+      ]
+    },
+    {
+      "id": "phase5",
+      "title": "Phase 5 — Applied Environmental Challenges",
+      "badges": ["Recharge", "Flood Risk", "Suitability"],
+      "description": "Integrate multi-layer analyses for conservation/water resources in the Hill Country.",
+      "tasks": [
+        {
+          "id": "5.1",
+          "text": "Aquifer Recharge: Overlay karst geology (Edwards Aquifer outcrops), precipitation (PRISM), slope; find likely recharge zones.",
+          "links": [
+            {"label": "TWDB GIS", "url": "https://www.twdb.texas.gov/mapping/gis/index.asp"},
+            {"label": "PRISM Precip", "url": "https://prism.oregonstate.edu/"}
+          ]
+        },
+        {
+          "id": "5.2",
+          "text": "Flood Risk: Combine DEM-derived flow paths with rainfall intensity; map flood-prone corridors along Nueces/Frio.",
+          "links": [
+            {"label": "USGS DEM", "url": "https://apps.nationalmap.gov/downloader/"}
+          ]
+        },
+        {
+          "id": "5.3",
+          "text": "Habitat Suitability: Weight land cover, slope, distance to water/roads; produce a suitability raster.",
+          "links": [
+            {"label": "Raster Weighted Overlay", "url": "https://docs.qgis.org/latest/en/docs/user_manual/processing_algs/qgis/raster_analysis.html"}
+          ]
+        },
+        {
+          "id": "5.4",
+          "text": "Milestone: Conservation Plan — map priority restoration areas and export a report/map series.",
+          "links": [
+            {"label": "QGIS Atlas (Map Series)", "url": "https://docs.qgis.org/latest/en/docs/user_manual/print_composer/create_atlas.html"}
+          ]
+        }
+      ],
+      "drills": [
+        {"label": "Multi-criteria decision analysis (search)", "url": "https://www.google.com/search?q=QGIS+weighted+overlay+MCDA"}
+      ]
+    },
+    {
+      "id": "phase6",
+      "title": "Phase 6 — Automation & Scaling",
+      "badges": ["PyQGIS", "Batch", "PostGIS"],
+      "description": "Automate workflows with PyQGIS; scale to larger extents; share web maps.",
+      "tasks": [
+        {
+          "id": "6.1",
+          "text": "Write a PyQGIS script to batch-export NDVI for all scenes in a folder; save PNG + CSV stats.",
+          "links": [
+            {"label": "PyQGIS Developer Cookbook", "url": "https://docs.qgis.org/latest/en/docs/pyqgis_developer_cookbook/"}
+          ]
+        },
+        {
+          "id": "6.2",
+          "text": "Automate a county map series with QGIS Atlas; export PDFs to outputs/atlas/.",
+          "links": [
+            {"label": "QGIS Atlas", "url": "https://docs.qgis.org/latest/en/docs/user_manual/print_composer/create_atlas.html"}
+          ]
+        },
+        {
+          "id": "6.3",
+          "text": "Optional: Load layers into PostGIS; run spatial SQL for summaries.",
+          "links": [
+            {"label": "PostGIS Docs", "url": "https://postgis.net/documentation/"}
+          ]
+        },
+        {
+          "id": "6.4",
+          "text": "Milestone: Build a simple web map from QGIS via qgis2web (Leaflet).",
+          "links": [
+            {"label": "qgis2web Plugin", "url": "https://plugins.qgis.org/plugins/qgis2web/"}
+          ]
+        }
+      ],
+      "drills": [
+        {"label": "Spatial SQL basics (video search)", "url": "https://www.youtube.com/results?search_query=PostGIS+basics"}
+      ]
+    }
+  ]
+}

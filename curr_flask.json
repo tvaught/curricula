@@ -1,0 +1,91 @@
+{
+  "title": "Flask Web Development Curriculum",
+  "description": "Step-by-step journey to learn Flask for modern web applications.",
+  "phases": [
+    {
+      "id": "phase1",
+      "title": "Phase 1 — Foundations of Flask",
+      "badges": ["Python", "Environment", "Hello World"],
+      "description": "Set up your environment and understand basic routing.",
+      "tasks": [
+        {
+          "id": "1.1",
+          "text": "Install Python 3.11+ and pip. Create a virtual environment.",
+          "links": [{"label": "Python Downloads", "url": "https://www.python.org/downloads/"}]
+        },
+        {
+          "id": "1.2",
+          "text": "Install Flask using pip and verify with a sample script.",
+          "links": [{"label": "Flask Installation", "url": "https://flask.palletsprojects.com/en/latest/installation/"}]
+        },
+        {
+          "id": "1.3",
+          "text": "Create `app.py` with a simple route returning 'Hello, Flask!'.",
+          "links": [{"label": "Quickstart", "url": "https://flask.palletsprojects.com/en/latest/quickstart/"}]
+        }
+      ],
+      "drills": [
+        {"label": "What is a WSGI app?", "url": "https://wsgi.readthedocs.io/en/latest/"}
+      ]
+    },
+    {
+      "id": "phase2",
+      "title": "Phase 2 — Templates & Static Files",
+      "badges": ["Jinja2", "CSS", "HTML"],
+      "description": "Learn templating, static file serving, and dynamic content rendering.",
+      "tasks": [
+        {"id": "2.1", "text": "Create `templates/` and build your first Jinja2 HTML file.", "links": []},
+        {"id": "2.2", "text": "Add `static/` folder for CSS and images. Link with `url_for('static', ...)`.", "links": []},
+        {"id": "2.3", "text": "Use loops, conditionals, and blocks in Jinja2.", "links": [{"label": "Jinja Docs", "url": "https://jinja.palletsprojects.com/en/latest/templates/"}]}
+      ],
+      "drills": [{"label": "Jinja Cheat Sheet", "url": "https://jinja.palletsprojects.com/en/latest/templates/#cheat-sheet"}]
+    },
+    {
+      "id": "phase3",
+      "title": "Phase 3 — Forms & User Input",
+      "badges": ["Flask-WTF", "Validation", "Bootstrap"],
+      "description": "Learn form handling and basic web interactivity.",
+      "tasks": [
+        {"id": "3.1", "text": "Install Flask-WTF and build a contact form.", "links": []},
+        {"id": "3.2", "text": "Validate form input and flash messages.", "links": [{"label": "Flask-WTF Docs", "url": "https://flask-wtf.readthedocs.io/en/stable/"}]},
+        {"id": "3.3", "text": "Style forms with Bootstrap and WTForms macros.", "links": [{"label": "Bootstrap", "url": "https://getbootstrap.com/"}]}
+      ],
+      "drills": [{"label": "Flashing Messages Tutorial", "url": "https://flask.palletsprojects.com/en/latest/patterns/flashing/"}]
+    },
+    {
+      "id": "phase4",
+      "title": "Phase 4 — Databases & Models",
+      "badges": ["SQLite", "SQLAlchemy", "Migrations"],
+      "description": "Add persistent data storage and model relationships.",
+      "tasks": [
+        {"id": "4.1", "text": "Integrate SQLAlchemy ORM with Flask.", "links": [{"label": "Flask-SQLAlchemy", "url": "https://flask-sqlalchemy.palletsprojects.com/"}]},
+        {"id": "4.2", "text": "Define models and relationships (User, Post).", "links": []},
+        {"id": "4.3", "text": "Run basic queries and migrations.", "links": [{"label": "Flask-Migrate", "url": "https://flask-migrate.readthedocs.io/en/latest/"}]}
+      ],
+      "drills": [{"label": "SQLite Browser Tool", "url": "https://sqlitebrowser.org/"}]
+    },
+    {
+      "id": "phase5",
+      "title": "Phase 5 — Authentication & Blueprints",
+      "badges": ["Login", "Security", "Structure"],
+      "description": "Add user authentication and organize large applications.",
+      "tasks": [
+        {"id": "5.1", "text": "Implement login/logout with Flask-Login.", "links": [{"label": "Flask-Login Docs", "url": "https://flask-login.readthedocs.io/en/latest/"}]},
+        {"id": "5.2", "text": "Use blueprints to modularize routes.", "links": [{"label": "Blueprint Tutorial", "url": "https://flask.palletsprojects.com/en/latest/blueprints/"}]}
+      ],
+      "drills": [{"label": "Hashing Passwords", "url": "https://werkzeug.palletsprojects.com/en/latest/utils/#werkzeug.security.generate_password_hash"}]
+    },
+    {
+      "id": "phase6",
+      "title": "Phase 6 — Deployment & Extensions",
+      "badges": ["Gunicorn", "Docker", "Cloud"],
+      "description": "Deploy and extend your Flask app for production.",
+      "tasks": [
+        {"id": "6.1", "text": "Run app with Gunicorn in a Linux environment.", "links": []},
+        {"id": "6.2", "text": "Containerize with Docker.", "links": [{"label": "Docker Docs", "url": "https://docs.docker.com/"}]},
+        {"id": "6.3", "text": "Deploy on Render, Fly.io, or Railway.", "links": []}
+      ],
+      "drills": [{"label": "Gunicorn Config Example", "url": "https://docs.gunicorn.org/en/stable/settings.html"}]
+    }
+  ]
+}
